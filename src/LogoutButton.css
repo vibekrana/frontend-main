@@ -1,0 +1,29 @@
+.logout-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 0.5rem 1.25rem;
+  background-color: #facc15;
+  color: #1f2937;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  z-index: 1000;
+}
+
+.logout-button:hover {
+  background-color: #eab308;
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+@media (max-width: 768px) {
+  .logout-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
