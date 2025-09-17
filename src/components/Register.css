@@ -1,69 +1,434 @@
-/* === Global Page Styling === */
+/* register.css - Blue & Yellow Theme */
+
+/* Color Variables */
+:root {
+  --very-dark-blue: #000814;
+  --dark-blue: #001D3D;
+  --medium-blue: #003566;
+  --bright-yellow: #FFC300;
+  --light-yellow: #FFD60A;
+  --white: #ffffff;
+  --light-gray: #f8f9fa;
+  --success: #28a745;
+  --error: #dc3545;
+}
+
+/* Global Page Styling */
 body {
-  background-color: #0d1117;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  color: white;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+  color: var(--very-dark-blue);
+  transition: all 0.3s ease;
 }
 
-/* === Container Box === */
+/* Dark theme body */
+body.dark {
+  background: linear-gradient(135deg, var(--very-dark-blue) 0%, var(--dark-blue) 100%);
+  color: var(--white);
+}
+
+/* Container Box */
 .register-container {
-  background-color: #161b22;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
-  width: 360px;
+  background: var(--white);
+  border: 2px solid var(--bright-yellow);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease;
   text-align: center;
 }
 
-/* === Heading === */
-.register-container h2 {
-  margin-bottom: 20px;
-  color: #58a6ff;
+.dark .register-container {
+  background: var(--dark-blue);
+  border-color: var(--light-yellow);
+  color: var(--white);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* === Form Inputs === */
+/* Logo */
+.register-logo {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem;
+  display: block;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* INIKOLA Branding Section */
+.brand-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.brand-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+  transition: all 0.3s ease;
+  color: var(--bright-yellow);
+}
+
+.dark .brand-name {
+  color: var(--light-yellow);
+}
+
+.brand-tagline {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--very-dark-blue);
+  opacity: 0.8;
+}
+
+.dark .brand-tagline {
+  color: var(--white);
+}
+
+/* Heading */
+.register-container h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--very-dark-blue);
+  transition: all 0.3s ease;
+}
+
+.dark .register-container h2 {
+  color: var(--light-yellow);
+}
+
+.register-subheader {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+  color: var(--very-dark-blue);
+}
+
+.dark .register-subheader {
+  color: var(--white);
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--bright-yellow);
+}
+
+.dark .form-group label {
+  color: var(--light-yellow);
+}
+
+/* Form Inputs */
 .register-container input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #30363d;
-  background-color: #0d1117;
-  color: white;
-  font-size: 14px;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+  background: var(--light-gray);
+  color: var(--very-dark-blue);
+  border: 2px solid var(--bright-yellow);
+  box-sizing: border-box;
+}
+
+.dark .register-container input {
+  background: var(--medium-blue);
+  color: var(--white);
+  border-color: var(--light-yellow);
 }
 
 .register-container input::placeholder {
-  color: #8b949e;
+  color: #9ca3af;
 }
 
-/* === Button === */
+.register-container input:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 195, 0, 0.3);
+}
+
+.dark .register-container input:focus {
+  box-shadow: 0 0 15px rgba(255, 211, 10, 0.3);
+}
+
+.register-container input.error {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Field hints and errors */
+.field-hint {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  color: var(--very-dark-blue);
+}
+
+.dark .field-hint {
+  color: var(--white);
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--error);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Button */
 .register-container button {
   width: 100%;
-  padding: 12px;
-  background-color: #238636;
-  color: white;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--bright-yellow);
+  color: var(--very-dark-blue);
+  margin-top: 1rem;
 }
 
-.register-container button:hover {
-  background-color: #2ea043;
+.dark .register-container button {
+  background: var(--light-yellow);
 }
 
-/* === Status Message === */
+.register-container button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: var(--light-yellow);
+  box-shadow: 0 8px 20px rgba(255, 195, 0, 0.4);
+}
+
+.dark .register-container button:hover:not(:disabled) {
+  box-shadow: 0 8px 20px rgba(255, 211, 10, 0.4);
+}
+
+.register-container button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Status Messages */
 .status-message {
-  margin-top: 15px;
-  color: #ffd700;
-  font-size: 14px;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-message.success {
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--success);
+  border: 2px solid var(--success);
+}
+
+.status-message.error {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--error);
+  border: 2px solid var(--error);
+}
+
+.status-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 12px;
+}
+
+.status-message.success .status-icon {
+  background: var(--success);
+}
+
+.status-message.error .status-icon {
+  background: var(--error);
+}
+
+/* Footer Links */
+.register-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.login-link {
+  color: var(--bright-yellow);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.dark .login-link {
+  color: var(--light-yellow);
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--bright-yellow);
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  font-size: 0.9rem;
+  background: var(--bright-yellow);
+  color: var(--very-dark-blue);
+}
+
+.dark .theme-toggle {
+  background: var(--very-dark-blue);
+  color: var(--light-yellow);
+  border-color: var(--light-yellow);
+  box-shadow: 0 0 15px rgba(255, 211, 10, 0.3);
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Back Button */
+.back-button {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--bright-yellow);
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--bright-yellow);
+  text-decoration: none;
+}
+
+.dark .back-button {
+  color: var(--light-yellow);
+  border-color: var(--light-yellow);
+}
+
+.back-button:hover {
+  background: var(--bright-yellow);
+  color: var(--very-dark-blue);
+  transform: translateY(-2px);
+}
+
+.dark .back-button:hover {
+  background: var(--light-yellow);
+  color: var(--very-dark-blue);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .register-container {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+    max-width: 90%;
+  }
+  
+  .theme-toggle,
+  .back-button {
+    top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .theme-toggle {
+    left: 1rem;
+  }
+  
+  .back-button {
+    right: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .register-container h2 {
+    font-size: 1.75rem;
+  }
+  
+  .register-container input {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .register-container button {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
 }

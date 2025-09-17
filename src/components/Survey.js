@@ -65,54 +65,54 @@ const Survey = () => {
       'finance': [
         { id: 'financial_products', question: 'What are the main financial products or services your business offers?', type: 'textarea', placeholder: 'Describe your main financial products/services...' },
         { id: 'target_audience', question: 'Who is your target audience for social media (e.g., individuals, businesses, investors)?', type: 'text', placeholder: 'e.g., individuals, businesses, investors' },
-        { id: 'social_tone', question: 'What tone do you want to convey in your social media posts?', type: 'select', options: ['Trustworthy', 'Professional', 'Approachable', 'Mix of above'] },
-        { id: 'image_focus', question: 'Do you prefer images that highlight trust and security, growth and success, or expert advice?', type: 'select', options: ['Trust and security', 'Growth and success', 'Expert advice', 'Mix of above'] },
-        { id: 'visual_style', question: 'Should your visuals lean more towards professional corporate settings or personal customer stories?', type: 'radio', options: ['Professional corporate settings', 'Personal customer stories', 'Both'] },
-        { id: 'data_visuals', question: 'Would you like to include infographics, graphs, or data visualizations in your posts?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
+        { id: 'social_tone', question: 'What tone do you want to convey in your social media posts?', type: 'checkbox', options: ['Trustworthy', 'Professional', 'Approachable'] },
+        { id: 'image_focus', question: 'Do you prefer images that highlight trust and security, growth and success, or expert advice?', type: 'checkbox', options: ['Trust and security', 'Growth and success', 'Expert advice'] },
+        { id: 'visual_style', question: 'Should your visuals lean more towards professional corporate settings or personal customer stories?', type: 'checkbox', options: ['Professional corporate settings', 'Personal customer stories'] },
+        { id: 'include_data_visuals', question: 'Would you like to include infographics, graphs, or data visualizations in your posts?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
         ...commonQuestions
       ],
       'education': [
         { id: 'educational_services', question: 'What type of educational services or programs does your institution offer?', type: 'textarea', placeholder: 'Describe your educational programs...' },
         { id: 'primary_audience', question: 'Who are the primary audiences you want to engage through social media?', type: 'checkbox', options: ['Students', 'Parents', 'Faculty', 'Alumni', 'Community'] },
         { id: 'key_messages', question: 'What key messages do you want to communicate about your institution?', type: 'textarea', placeholder: 'Describe your key messages...' },
-        { id: 'image_showcase', question: 'Do you prefer images showcasing student achievements, campus life, or faculty expertise?', type: 'select', options: ['Student achievements', 'Campus life', 'Faculty expertise', 'Mix of above'] },
-        { id: 'learning_format', question: 'Should visuals highlight in-person activities or online learning platforms?', type: 'radio', options: ['In-person activities', 'Online learning platforms', 'Both'] },
-        { id: 'feature_content', question: 'Would you like to feature events, guest lectures, or community involvement in your images?', type: 'checkbox', options: ['Events', 'Guest lectures', 'Community involvement', 'All of above'] },
+        { id: 'image_showcase', question: 'Do you prefer images showcasing student achievements, campus life, or faculty expertise?', type: 'checkbox', options: ['Student achievements', 'Campus life', 'Faculty expertise'] },
+        { id: 'learning_format', question: 'Should visuals highlight in-person activities or online learning platforms?', type: 'checkbox', options: ['In-person activities', 'Online learning platforms'] },
+        { id: 'feature_content', question: 'Would you like to feature events, guest lectures, or community involvement in your images?', type: 'checkbox', options: ['Events', 'Guest lectures', 'Community involvement'] },
         ...commonQuestions
       ],
       'technology': [
         { id: 'tech_products', question: 'What are your company\'s main products or services in the tech sector?', type: 'textarea', placeholder: 'Describe your tech products/services...' },
         { id: 'target_audience', question: 'Who is your target audience?', type: 'checkbox', options: ['Tech professionals', 'Consumers', 'Businesses', 'Startups', 'Enterprise'] },
         { id: 'brand_values', question: 'What brand values or qualities should your social media convey?', type: 'checkbox', options: ['Innovation', 'Reliability', 'User-friendliness', 'Cutting-edge', 'Trustworthy'] },
-        { id: 'design_preference', question: 'Do you prefer futuristic, sleek designs or more practical, real-world tech visuals?', type: 'radio', options: ['Futuristic, sleek designs', 'Practical, real-world visuals', 'Mix of both'] },
-        { id: 'image_focus', question: 'Should images focus on product demonstrations or conceptual innovation?', type: 'radio', options: ['Product demonstrations', 'Conceptual innovation', 'Both'] },
-        { id: 'interactive_content', question: 'Would you like to include animated or interactive visuals in your social media content?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
+        { id: 'design_preference', question: 'Do you prefer futuristic, sleek designs or more practical, real-world tech visuals?', type: 'checkbox', options: ['Futuristic, sleek designs', 'Practical, real-world visuals'] },
+        { id: 'image_focus', question: 'Should images focus on product demonstrations or conceptual innovation?', type: 'checkbox', options: ['Product demonstrations', 'Conceptual innovation'] },
+        { id: 'include_interactive_content', question: 'Would you like to include animated or interactive visuals in your social media content?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
         ...commonQuestions
       ],
       'real-estate': [
         { id: 'property_specialization', question: 'What types of properties does your business specialize in?', type: 'checkbox', options: ['Residential', 'Commercial', 'Luxury', 'Rental', 'Investment'] },
         { id: 'main_clients', question: 'Who are your main clients?', type: 'checkbox', options: ['Buyers', 'Renters', 'Investors', 'First-time buyers', 'Commercial clients'] },
         { id: 'selling_points', question: 'What key selling points do you want to emphasize on social media?', type: 'textarea', placeholder: 'Describe your key selling points...' },
-        { id: 'image_showcase', question: 'Do you prefer images showcasing property interiors, neighborhood lifestyles, or renovations?', type: 'select', options: ['Property interiors', 'Neighborhood lifestyles', 'Renovations', 'Mix of above'] },
-        { id: 'client_stories', question: 'Should visuals feature testimonials or success stories from clients?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
-        { id: 'aerial_photography', question: 'Would aerial or drone photography be useful in your social media posts?', type: 'radio', options: ['Yes', 'No', 'For certain properties'] },
+        { id: 'image_showcase', question: 'Do you prefer images showcasing property interiors, neighborhood lifestyles, or renovations?', type: 'checkbox', options: ['Property interiors', 'Neighborhood lifestyles', 'Renovations'] },
+        { id: 'feature_client_stories', question: 'Should visuals feature testimonials or success stories from clients?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
+        // { id: 'aerial_photography', question: 'Would aerial or drone photography be useful in your social media posts?', type: 'radio', options: ['Yes', 'No', 'For certain properties'] },
         ...commonQuestions
       ],
       'healthcare': [
         { id: 'healthcare_services', question: 'What healthcare services or specialties does your business offer?', type: 'textarea', placeholder: 'Describe your healthcare services...' },
         { id: 'primary_audience', question: 'Who is your primary audience?', type: 'checkbox', options: ['Patients', 'Families', 'Healthcare professionals', 'Community', 'Insurance providers'] },
         { id: 'core_values', question: 'What core values should your social media images communicate?', type: 'checkbox', options: ['Trust', 'Care', 'Innovation', 'Expertise', 'Compassion'] },
-        { id: 'image_highlight', question: 'Do you prefer images highlighting medical staff, patient care, or healthcare technology?', type: 'select', options: ['Medical staff', 'Patient care', 'Healthcare technology', 'Mix of above'] },
-        { id: 'visual_focus', question: 'Should visuals focus on wellness campaigns, testimonials, or facilities?', type: 'select', options: ['Wellness campaigns', 'Testimonials', 'Facilities', 'Mix of above'] },
-        { id: 'treatment_visuals', question: 'Are before-and-after treatment visuals or case studies something you want to include?', type: 'radio', options: ['Yes', 'No', 'With patient consent only'] },
+        { id: 'image_highlight', question: 'Do you prefer images highlighting medical staff, patient care, or healthcare technology?', type: 'checkbox', options: ['Medical staff', 'Patient care', 'Healthcare technology'] },
+        { id: 'visual_focus', question: 'Should visuals focus on wellness campaigns, testimonials, or facilities?', type: 'checkbox', options: ['Wellness campaigns', 'Testimonials', 'Facilities'] },
+        { id: 'include_treatment_visuals', question: 'Are before-and-after treatment visuals or case studies something you want to include?', type: 'radio', options: ['Yes', 'No', 'With patient consent only'] },
         ...commonQuestions
       ],
       'ecommerce': [
         { id: 'product_types', question: 'What types of products do you sell primarily?', type: 'textarea', placeholder: 'Describe your main product categories...' },
         { id: 'main_customers', question: 'Who are your main customers or market segments?', type: 'text', placeholder: 'Describe your target customers...' },
-        { id: 'brand_personality', question: 'What brand personality do you want to express through social media?', type: 'select', options: ['Fun', 'Professional', 'Creative', 'Trendy', 'Trustworthy', 'Mix'] },
-        { id: 'image_style', question: 'Do you prefer product-focused images or lifestyle shots showing your products in use?', type: 'radio', options: ['Product-focused images', 'Lifestyle shots', 'Both'] },
-        { id: 'content_highlight', question: 'Should visuals highlight seasonal sales, new arrivals, or behind-the-scenes content?', type: 'checkbox', options: ['Seasonal sales', 'New arrivals', 'Behind-the-scenes', 'All of above'] },
+        { id: 'brand_personality', question: 'What brand personality do you want to express through social media?', type: 'checkbox', options: ['Fun', 'Professional', 'Creative', 'Trendy', 'Trustworthy'] },
+        { id: 'image_style', question: 'Do you prefer product-focused images or lifestyle shots showing your products in use?', type: 'checkbox', options: ['Product-focused images', 'Lifestyle shots'] },
+        { id: 'content_highlight', question: 'Should visuals highlight seasonal sales, new arrivals, or behind-the-scenes content?', type: 'checkbox', options: ['Seasonal sales', 'New arrivals', 'Behind-the-scenes'] },
         { id: 'ugc_strategy', question: 'Would user-generated content or influencer posts be part of your social media strategy?', type: 'radio', options: ['Yes', 'No', 'Considering it'] },
         ...commonQuestions
       ],
@@ -120,8 +120,8 @@ const Survey = () => {
         { id: 'cuisine_experience', question: 'What type of cuisine and dining experience does your restaurant offer?', type: 'textarea', placeholder: 'Describe your cuisine and dining experience...' },
         { id: 'typical_customers', question: 'Who are your typical customers or target demographic?', type: 'text', placeholder: 'Describe your typical customers...' },
         { id: 'unique_qualities', question: 'What unique qualities or atmosphere do you want to communicate on social media?', type: 'textarea', placeholder: 'Describe your unique qualities...' },
-        { id: 'image_preference', question: 'Do you prefer images of food presentation, dining ambiance, or kitchen activity?', type: 'select', options: ['Food presentation', 'Dining ambiance', 'Kitchen activity', 'Mix of above'] },
-        { id: 'content_highlight', question: 'Should visuals highlight seasonal menus, special events, or customer interactions?', type: 'checkbox', options: ['Seasonal menus', 'Special events', 'Customer interactions', 'All of above'] },
+        { id: 'image_preference', question: 'Do you prefer images of food presentation, dining ambiance, or kitchen activity?', type: 'checkbox', options: ['Food presentation', 'Dining ambiance', 'Kitchen activity'] },
+        { id: 'content_highlight', question: 'Should visuals highlight seasonal menus, special events, or customer interactions?', type: 'checkbox', options: ['Seasonal menus', 'Special events', 'Customer interactions'] },
         { id: 'sustainability', question: 'Would you like to promote sustainable sourcing or dietary options through your visuals?', type: 'radio', options: ['Yes', 'No', 'Sometimes'] },
         ...commonQuestions
       ],
@@ -129,8 +129,8 @@ const Survey = () => {
         { id: 'business_description', question: 'What is your business type and how would you describe your business or industry?', type: 'textarea', placeholder: 'Describe your business type and industry...' },
         { id: 'target_audience', question: 'Who is your target audience or customer base?', type: 'text', placeholder: 'Describe your target audience...' },
         { id: 'key_messages', question: 'What key messages or values do you want your social media to communicate?', type: 'textarea', placeholder: 'Describe your key messages and values...' },
-        { id: 'image_style', question: 'What style of images appeals most to your brand?', type: 'select', options: ['Professional', 'Casual', 'Artistic', 'Modern', 'Traditional', 'Mix'] },
-        { id: 'visual_focus', question: 'Should visuals focus more on products, services, or customer stories?', type: 'select', options: ['Products', 'Services', 'Customer stories', 'Mix of above'] },
+        { id: 'image_style', question: 'What style of images appeals most to your brand?', type: 'checkbox', options: ['Professional', 'Casual', 'Artistic', 'Modern', 'Traditional'] },
+        { id: 'visual_focus', question: 'Should visuals focus more on products, services, or customer stories?', type: 'checkbox', options: ['Products', 'Services', 'Customer stories'] },
         { id: 'preferred_themes', question: 'Do you have preferred colors, moods, or themes you want reflected in your visuals?', type: 'textarea', placeholder: 'Describe your preferred colors, moods, or themes...' },
         ...commonQuestions
       ]
@@ -167,7 +167,7 @@ const Survey = () => {
   const handleSubmitSurvey = async () => {
     setIsSubmitting(true);
     setError('');
-    
+
     try {
       const surveyData = {
         businessType,
@@ -176,12 +176,25 @@ const Survey = () => {
         userId: localStorage.getItem('registeredUserId') || 'anonymous'
       };
 
-      localStorage.setItem('surveyData', JSON.stringify(surveyData));
-      
-      console.log('Survey Data Collected:', surveyData);
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      console.log('Sending survey data:', surveyData);  // Debug log
+
+      const response = await fetch(
+        'https://4fqbpp1yya.execute-api.ap-south-1.amazonaws.com/prod/user/register',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ surveyData })
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to submit survey: ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Survey submission response:', data);
+
       setSuccess('✅ Survey completed successfully! Redirecting to login...');
       
       setTimeout(() => {
@@ -189,10 +202,10 @@ const Survey = () => {
       }, 1500);
 
     } catch (error) {
-      console.error('Error processing survey:', error);
-      setError('Error processing survey. Please try again.');
+        console.error('Error processing survey:', error);
+        setError('Error processing survey. Please try again.');
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
   };
 

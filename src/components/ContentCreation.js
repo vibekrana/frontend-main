@@ -160,7 +160,7 @@ const ContentCreation = ({ user }) => {
               required
             >
               <option value="" disabled>Choose content type</option>
-              {["Informative", "Inspirational", "Promotional", "Educational"].map((type) => (
+              {["Informative", "Inspirational", "Promotional", "Educational","Engaging"].map((type) => (
                 <option key={type} value={type}>{type}</option>
               ))}
             </select>
