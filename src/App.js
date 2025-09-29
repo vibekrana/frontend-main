@@ -1,109 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import ContentCreation from "./components/ContentCreation";
 import Register from "./components/Register";
 import Survey from "./components/Survey";
-import Connect from "./Connect"; // Import the Connect component
+import UserProfile from "./components/UserProfile";
+import Connect from "./Connect";
+import Protected from "./routes/Protected";
+
+// Helper
+const hasToken = () => !!localStorage.getItem("token");
 
 const App = () => {
-  const [user, setUser] = useState(null);
-
-  // Check if the user is already logged in (e.g., token exists in localStorage)
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // You could verify the token with the backend here, but for now, assume it's valid
-      setUser({ username: localStorage.getItem("username") || "admin" }); // Use stored username or default
-    }
-  }, []);
-
-  const handleLogin = (userData) => {
-    setUser(userData);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("appUser");
-    setUser(null);
-  };
-
   return (
     <Router>
       <Routes>
+        {/* Public routes: if already authed, bounce to /connect */}
         <Route
           path="/login"
-          element={
-            user ? <Navigate to="/connect" /> : <Login onLogin={handleLogin} />
-          }
+          element={hasToken() ? <Navigate to="/connect" replace /> : <Login />}
         />
         <Route
           path="/register"
-          element={user ? <Navigate to="/connect" /> : <Register />}
+          element={hasToken() ? <Navigate to="/connect" replace /> : <Register />}
         />
-
-        {/* Add Survey Route */}
         <Route path="/survey" element={<Survey />} />
 
+        {/* Protected routes (single definition each) */}
         <Route
           path="/connect"
           element={
-            user ? (
-              <div>
-                <div style={{ position: "absolute", top: 10, right: 10 }}>
-                  <button
-                    onClick={handleLogout}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      backgroundColor: "#facc15",
-                      color: "#1f2937",
-                      border: "none",
-                      borderRadius: "0.5rem",
-                      cursor: "pointer",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Logout
-                  </button>
-                </div>
-                <Connect />
-              </div>
-            ) : (
-              <Navigate to="/login" />
-            )
+            <Protected>
+              <Connect />
+            </Protected>
+          }
+        />
+        <Route
+          path="/content-creation"
+          element={
+            <Protected>
+              <ContentCreation />
+            </Protected>
+          }
+        />
+        <Route
+          path="/schedule"
+          element={
+            <Protected>
+              <div style={{ padding: "2rem" }}>Schedule Page - Coming Soon</div>
+            </Protected>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <Protected>
+              <div style={{ padding: "2rem" }}>Analytics Page - Coming Soon</div>
+            </Protected>
+          }
+        />
+        <Route
+          path="/my-posts"
+          element={
+            <Protected>
+              <div style={{ padding: "2rem" }}>My Posts Page - Coming Soon</div>
+            </Protected>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Protected>
+              <UserProfile />
+            </Protected>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <Protected>
+              <div style={{ padding: "2rem" }}>Settings Page - Coming Soon</div>
+            </Protected>
           }
         />
 
-        <Route
-          path="/content"
-          element={
-            user ? (
-              <div>
-                <div style={{ position: "absolute", top: 10, right: 10 }}>
-                  <button
-                    onClick={handleLogout}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      backgroundColor: "#facc15",
-                      color: "#1f2937",
-                      border: "none",
-                      borderRadius: "0.5rem",
-                      cursor: "pointer",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Logout
-                  </button>
-                </div>
-                <ContentCreation user={user} />
-              </div>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route path="*" element={<Navigate to="/login" />} />
+        {/* Default */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );

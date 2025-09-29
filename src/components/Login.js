@@ -1,5 +1,6 @@
 // src/components/Login.js
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
 
@@ -10,19 +11,35 @@ const Login = ({ onLogin }) => {
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const navigate = useNavigate();
 
   // Toggle theme and persist
   const toggleTheme = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
+    
+    if (newMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
   };
 
-  // On load, check for saved theme
+  // On load, check for saved theme and existing token
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    if (saved === "dark") setIsDarkMode(true);
-  }, []);
+    if (saved === "dark") {
+      setIsDarkMode(true);
+      document.body.classList.add("dark");
+    }
+
+    // If user is already logged in, redirect to connect
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/connect", { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,11 +55,17 @@ const Login = ({ onLogin }) => {
       localStorage.setItem("token", token);
       localStorage.setItem("username", user.username);
       setSuccess("Login successful! Redirecting...");
-      setTimeout(() => {
+      
+      // Call onLogin if provided
+      if (onLogin) {
         onLogin(user);
+      }
+      
+      // Navigate after a brief delay for UX
+      setTimeout(() => {
         setIsLoading(false);
-        window.location.href = "/connect";
-      }, 1500);
+        navigate("/connect", { replace: true });
+      }, 1000);
     } catch (err) {
       setError("Invalid username or password");
       setIsLoading(false);
@@ -50,97 +73,109 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className={`login-container-split ${isDarkMode ? "dark" : "light"}`}>
-      {/* Theme Toggle */}
-      <button className="theme-toggle top-left" onClick={toggleTheme}>
-        {isDarkMode ? "☀️ Light" : "🌙 Dark"}
-      </button>
-
-      {/* Logout Placeholder */}
-      <button className="logout-button top-right">Logout</button>
-
-      {/* Floating Icons */}
-      <div className="extra-icons">
-        <span className="icon1">🚀</span>
-        <span className="icon2">🤖</span>
-        <span className="icon3">📊</span>
-        <span className="icon4">💡</span>
+    <>
+      {/* Watermark Container */}
+      <div className="watermark-container">
+        <div className="watermark-text watermark-1">MARKETING BOT</div>
+        <div className="watermark-text watermark-2">MARKETING BOT</div>
+        <div className="watermark-icon icon-1">🚀</div>
+        <div className="watermark-icon icon-2">💡</div>
+        <div className="watermark-icon icon-3">📊</div>
       </div>
 
-      {/* Main Content Split Layout */}
-      <div className="login-split-content">
-        {/* Left Side - Marketing Message */}
-        <div className="marketing-section">
-          <div className="marketing-content">
-            <div className="brand-section">
-              <img src="/logo1922.png" alt="Inikola Logo" className="marketing-logo" />
+      {/* Theme Toggle */}
+      <button className="theme-toggle" onClick={toggleTheme}>
+        {isDarkMode ? "☀️" : "🌙"}
+      </button>
+
+      {/* Main Container */}
+      <div className="login-container">
+        <div className="login-wrapper">
+          
+          {/* Left Side - Branding */}
+          <div className="brand-section">
+            <div className="brand-header">
+              <img 
+                src="/123.jpg" 
+                alt="Marketing Bot Logo" 
+                className="brand-logo-img"
+              />
               <div className="brand-info">
-                <h2 className="brand-name">INIKOLA</h2>
-                <p className="brand-tagline">Presenting</p>
-              </div>
-            </div>
-            
-            <h1 className="marketing-title">
-              INDIA'S FAVORITE
-              <span className="marketing-highlight">MARKETING BOT</span>
-              for accelerated business growth
-            </h1>
-            
-            <p className="marketing-description">
-              Inikola's Marketing Bot helps 1000+ businesses automate their social media presence. 
-              Generate stunning content, schedule posts automatically, and grow your brand effortlessly 
-              across Instagram, LinkedIn, and more platforms.
-            </p>
-            
-            <div className="marketing-features">
-              <div className="feature-item">
-                <div className="feature-icon">🎨</div>
-                <div className="feature-text">
-                  <strong>AI-Powered Content Creation</strong>
-                  <span>Generate professional images and captions</span>
-                </div>
-              </div>
-              
-              <div className="feature-item">
-                <div className="feature-icon">📱</div>
-                <div className="feature-text">
-                  <strong>Multi-Platform Posting</strong>
-                  <span>Auto-post to Instagram, LinkedIn & more</span>
-                </div>
-              </div>
-              
-              <div className="feature-item">
-                <div className="feature-icon">⚡</div>
-                <div className="feature-text">
-                  <strong>Smart Scheduling</strong>
-                  <span>Optimize posting times for maximum reach</span>
-                </div>
+                <h1>Marketing Bot</h1>
+                <p>by INIKOLA</p>
               </div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="marketing-decorations">
-              <div className="decoration-circle decoration-1"></div>
-              <div className="decoration-circle decoration-2"></div>
-              <div className="decoration-person person-1">
-                <div className="person-avatar">👨‍💼</div>
+            <h2 className="brand-title">
+              START YOUR
+              <span className="brand-highlight"> MARKETING REVOLUTION</span>
+              <br />Join the AI-Powered Future
+            </h2>
+
+            <p className="brand-description">
+              Transform your business with the power of AI. Join 1000+ forward-thinking entrepreneurs 
+              who are already dominating social media. One platform, unlimited possibilities – create, 
+              schedule, and scale your brand like never before.
+            </p>
+
+            <div className="features-grid">
+              <div className="feature-card">
+                <div className="feature-icon">🎨</div>
+                <h3>AI-Powered Content Creation</h3>
+                <p>Generate professional images and captions</p>
               </div>
-              <div className="decoration-person person-2">
-                <div className="person-avatar">👩‍💻</div>
+
+              <div className="feature-card">
+                <div className="feature-icon">📱</div>
+                <h3>Multi-Platform Posting</h3>
+                <p>Auto-post to Instagram, LinkedIn & more</p>
               </div>
+
+              <div className="feature-card">
+                <div className="feature-icon">⚡</div>
+                <h3>Smart Scheduling</h3>
+                <p>Optimize posting times for maximum reach</p>
+              </div>
+
+              <div className="feature-card">
+                <div className="feature-icon">📊</div>
+                <h3>Analytics Dashboard</h3>
+                <p>Track performance & engagement metrics</p>
+              </div>
+            </div>
+
+            <div className="social-proof">
+              <div className="proof-icon">🚀</div>
+              <div className="proof-content">
+                <h4>Join 1000+ Growing Businesses</h4>
+                <p>Trusted by startups and enterprises worldwide for marketing automation</p>
+              </div>
+            </div>
+
+            {/* About Section */}
+            <div className="about-section">
+              <h3>About Marketing Bot</h3>
+              <p>
+                Marketing Bot is an AI-powered automation platform designed to revolutionize 
+                your social media marketing. Our advanced algorithms help you create engaging 
+                content, optimize posting schedules, and grow your audience across multiple platforms.
+              </p>
+              <p>
+                Built with cutting-edge technology, we empower businesses of all sizes to 
+                maintain a consistent and professional social media presence without the hassle 
+                of manual content creation and scheduling.
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* Right Side - Login Form */}
-        <div className="login-section">
-          <div className="login-form-container">
-            <div className="login-header-section">
-              <h2 className="login-form-title">Get started with your account</h2>
-              <p className="login-form-subtitle">Sign in to access your marketing dashboard</p>
+          {/* Right Side - Login Form */}
+          <div className="login-section">
+            <div className="login-header">
+              <h2>Get started with your account</h2>
+              <p>Sign in to access your marketing dashboard</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Username</label>
                 <input
@@ -164,52 +199,70 @@ const Login = ({ onLogin }) => {
               </div>
 
               {error && (
-                <div className="response-error">
-                  <div className="response-icon">!</div>
-                  <div className="response-content">
-                    <p>{error}</p>
-                  </div>
+                <div className="error-message">
+                  ⚠️ {error}
                 </div>
               )}
-              
+
               {success && (
-                <div className="response-success">
-                  <div className="response-icon">✓</div>
-                  <div className="response-content">
-                    <p>{success}</p>
-                  </div>
+                <div className="success-message">
+                  ✓ {success}
                 </div>
               )}
 
-              <button type="submit" className="login-submit-button" disabled={isLoading}>
-                {isLoading ? <div className="spinner"></div> : "GET STARTED"}
+              <button type="submit" className="btn-primary" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <span className="spinner"></span>
+                    Processing...
+                  </>
+                ) : (
+                  "GET STARTED"
+                )}
               </button>
-
-              <div className="form-footer">
-                <p>
-                  New user?{" "}
-                  <a href="/register" className="register-link">
-                    Register here
-                  </a>
-                </p>
-                
-                <div className="social-login">
-                  <span>or sign in using</span>
-                  <div className="social-buttons">
-                    <button type="button" className="social-btn google-btn">
-                      <span className="social-icon">G</span>
-                    </button>
-                    <button type="button" className="social-btn linkedin-btn">
-                      <span className="social-icon">in</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
             </form>
+
+            <div className="form-footer">
+              <p>
+                New user?{" "}
+                <a href="/register">
+                  Register here
+                </a>
+              </p>
+            </div>
+
+            <div className="stats-container">
+              <div className="stat-item">
+                <div className="stat-value">10+</div>
+                <div className="stat-label">Active Users</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">50+</div>
+                <div className="stat-label">Posts Created</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">98%</div>
+                <div className="stat-label">Satisfaction</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <footer className="login-footer">
+        <div className="footer-content">
+          <p>&copy; 2025 Marketing Bot by INIKOLA. All Rights Reserved.</p>
+          <div className="footer-links">
+            <a href="/privacy">Privacy Policy</a>
+            <span>•</span>
+            <a href="/terms">Terms of Service</a>
+            <span>•</span>
+            <a href="/contact">Contact Us</a>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 };
 

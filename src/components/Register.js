@@ -1,5 +1,6 @@
+//src/components/Register.js - Enhanced with Black & White Theme
 import React, { useState, useEffect } from 'react';
-import './Login.css';
+import './Register.css';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -15,52 +16,80 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const navigate = useNavigate();
 
-  // Load saved theme
   useEffect(() => {
     const saved = localStorage.getItem('theme');
-    if (saved === 'dark') setIsDarkMode(true);
+    if (saved === 'dark') {
+      setIsDarkMode(true);
+      document.body.classList.add('dark');
+    }
   }, []);
+
+  useEffect(() => {
+    if (formData.password) {
+      calculatePasswordStrength(formData.password);
+    }
+  }, [formData.password]);
 
   const toggleTheme = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     localStorage.setItem('theme', newMode ? 'dark' : 'light');
+    
+    if (newMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  };
+
+  const calculatePasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.length >= 10) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+    setPasswordStrength(strength);
+  };
+
+  const getPasswordStrengthLabel = () => {
+    if (passwordStrength === 0) return '';
+    if (passwordStrength <= 2) return 'Weak';
+    if (passwordStrength <= 3) return 'Fair';
+    if (passwordStrength <= 4) return 'Good';
+    return 'Strong';
+  };
+
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength <= 2) return '#ef4444';
+    if (passwordStrength <= 3) return '#f59e0b';
+    if (passwordStrength <= 4) return '#10b981';
+    return '#22d3ee';
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
     
-    // Clear validation error for this field when user starts typing
     if (validationErrors[name]) {
-      setValidationErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
     }
     
-    // Clear general error message when user starts typing
-    if (error) {
-      setError('');
-    }
+    if (error) setError('');
   };
 
   const validateForm = () => {
     const errors = {};
 
-    // Name validation
     if (!formData.name.trim()) {
       errors.name = 'Name is required';
     } else if (formData.name.trim().length < 2) {
       errors.name = 'Name must be at least 2 characters';
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
       errors.email = 'Email is required';
@@ -68,7 +97,6 @@ const Register = () => {
       errors.email = 'Please enter a valid email address';
     }
 
-    // Username validation
     if (!formData.username.trim()) {
       errors.username = 'Username is required';
     } else if (formData.username.trim().length < 3) {
@@ -77,14 +105,12 @@ const Register = () => {
       errors.username = 'Username can only contain letters, numbers, and underscores';
     }
 
-    // Password validation
     if (!formData.password) {
       errors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
 
-    // Confirm password validation
     if (!formData.confirmPassword) {
       errors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
@@ -99,7 +125,6 @@ const Register = () => {
     setError('');
     setSuccess('');
     
-    // Validate form
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -126,17 +151,25 @@ const Register = () => {
       );
 
       const data = await response.json();
+      console.log('Registration response:', { status: response.status, data });
 
       if (response.ok) {
-        // Registration successful
-        setSuccess('✅ Registration successful! Taking you to the survey...');
+        setSuccess('Registration successful! Taking you to the survey...');
         
-        // Store user info for survey
-        if (data.userId) {
-          localStorage.setItem('registeredUserId', data.userId);
+        // CRITICAL FIX: Save username to localStorage for survey linking
+        localStorage.setItem('registeredUserId', formData.username.trim());
+        localStorage.setItem('username', formData.username.trim());
+        
+        // Save token if returned
+        if (data.token) {
+          localStorage.setItem('token', data.token);
         }
         
-        // Clear form
+        console.log('Saved to localStorage:', {
+          registeredUserId: formData.username.trim(),
+          username: formData.username.trim()
+        });
+        
         setFormData({
           name: '',
           email: '',
@@ -145,41 +178,73 @@ const Register = () => {
           confirmPassword: ''
         });
         
-        // Navigate to survey after 1.5 seconds
         setTimeout(() => {
           navigate('/survey');
         }, 1500);
 
       } else {
-        // Registration failed - handle different error types
-        if (response.status === 400 || response.status === 409) {
-          // Handle duplicate user errors
-          if (data.error) {
-            const errorMessage = data.error.toLowerCase();
-            
-            if (errorMessage.includes('username') && errorMessage.includes('already')) {
-              setValidationErrors({ 
-                username: 'This username is already taken. Please choose another one.' 
-              });
-            } else if (errorMessage.includes('email') && errorMessage.includes('already')) {
-              setValidationErrors({ 
-                email: 'This email is already registered. Please use a different email or try logging in.' 
-              });
-            } else if (errorMessage.includes('user') && errorMessage.includes('already')) {
-              setError('An account with these details already exists. Please try logging in instead.');
-            } else {
-              setError(data.error);
-            }
-          } else {
-            setError('User already exists. Please try logging in or use different credentials.');
+        // Handle error responses with specific messages
+        if (data.error) {
+          const errorMessage = data.error.toLowerCase();
+          
+          // Check for username already exists
+          if (errorMessage.includes('username') && (errorMessage.includes('already') || errorMessage.includes('exists'))) {
+            setValidationErrors({ 
+              username: 'Username already taken. Please choose a different username.' 
+            });
+            setError(''); // Clear general error
+          } 
+          // Check for email already exists
+          else if (errorMessage.includes('email') && (errorMessage.includes('already') || errorMessage.includes('registered'))) {
+            setValidationErrors({ 
+              email: 'This email is already registered. Please use a different email or try logging in.' 
+            });
+            setError(''); // Clear general error
+          } 
+          // Generic user exists error
+          else if (errorMessage.includes('user') && errorMessage.includes('already')) {
+            setError('An account with these details already exists. Please try logging in instead.');
           }
-        } else if (response.status === 500) {
-          setError('Server error occurred. Please try again later.');
-        } else {
-          setError(data.error || 'Registration failed. Please try again.');
+          // Password mismatch
+          else if (errorMessage.includes('password') && errorMessage.includes('match')) {
+            setValidationErrors({
+              confirmPassword: 'Passwords do not match'
+            });
+            setError(''); // Clear general error
+          }
+          // Invalid format errors
+          else if (errorMessage.includes('invalid') && errorMessage.includes('email')) {
+            setValidationErrors({
+              email: 'Please enter a valid email address'
+            });
+            setError(''); // Clear general error
+          }
+          else if (errorMessage.includes('invalid') && errorMessage.includes('username')) {
+            setValidationErrors({
+              username: 'Username can only contain letters, numbers, and underscores'
+            });
+            setError(''); // Clear general error
+          }
+          // Any other error from backend
+          else {
+            setError(data.error);
+          }
+        } 
+        // Handle HTTP status codes without specific error message
+        else {
+          if (response.status === 409) {
+            setError('User already exists. Please try logging in or use different credentials.');
+          } else if (response.status === 400) {
+            setError('Invalid registration data. Please check all fields and try again.');
+          } else if (response.status === 500) {
+            setError('Server error occurred. Please try again later.');
+          } else {
+            setError('Registration failed. Please try again.');
+          }
         }
       }
     } catch (err) {
+      console.error('Registration error:', err);
       setError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
@@ -187,12 +252,12 @@ const Register = () => {
   };
 
   return (
-    <div className={`login-container ${isDarkMode ? 'dark' : 'light'}`}>
+    <div className={`register-container-split ${isDarkMode ? 'dark' : 'light'}`}>
       <button className="theme-toggle top-left" onClick={toggleTheme}>
-        {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+        {isDarkMode ? '☀️' : '🌙'}
       </button>
-      <button className="logout-button top-right" onClick={() => navigate('/login')}>
-        Back
+      <button className="logout-button" onClick={() => navigate('/login')}>
+        Logout →
       </button>
 
       <div className="extra-icons">
@@ -202,123 +267,185 @@ const Register = () => {
         <span className="icon4">💡</span>
       </div>
 
-      <div className="login-box">
-        <img src="/logo1922.png" alt="Logo" className="login-logo" />
-        <h1 className="login-header">Marketing Bot</h1>
-        <p className="login-subheader">Create Your Account</p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name *</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your full name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className={validationErrors.name ? 'error' : ''}
-              required
-            />
-            {validationErrors.name && <span className="field-error">{validationErrors.name}</span>}
+      <div className="register-split-content">
+        {/* Left Side - Marketing Message */}
+        <div className="marketing-section">
+          <div className="marketing-content">
+            <div className="brand-section">
+              <img src="/123.jpg" alt="Marketing Bot Logo" className="marketing-logo" />
+            </div>
+            
+            <h1 className="marketing-title">
+              START YOUR
+              <span className="marketing-highlight">MARKETING REVOLUTION</span>
+              Join the AI-Powered Future
+            </h1>
+            
+            <p className="marketing-description">
+              Transform your business with the power of AI. Join 1000+ forward-thinking entrepreneurs 
+              who are already dominating social media. One platform, unlimited possibilities – create, 
+              schedule, and scale your brand like never before.
+            </p>
           </div>
+        </div>
 
-          <div className="form-group">
-            <label>Email Address *</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email address"
-              value={formData.email}
-              onChange={handleInputChange}
-              className={validationErrors.email ? 'error' : ''}
-              required
-            />
-            {validationErrors.email && <span className="field-error">{validationErrors.email}</span>}
-          </div>
+        {/* Right Side - Registration Form */}
+        <div className="register-section">
+          <div className="register-form-container">
+            <h1 className="register-form-title">Create Your Account</h1>
+            <p className="register-form-subtitle">Start your free journey today</p>
 
-          <div className="form-group">
-            <label>Username *</label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Choose a unique username"
-              value={formData.username}
-              onChange={handleInputChange}
-              className={validationErrors.username ? 'error' : ''}
-              required
-            />
-            {validationErrors.username && <span className="field-error">{validationErrors.username}</span>}
-            <small className="field-hint">Letters, numbers, and underscores only. Min 3 characters.</small>
-          </div>
+            <div className="info-card">
+              <span style={{ fontSize: '1.25rem' }}>ℹ️</span>
+              <p style={{ fontSize: '0.875rem', margin: 0, lineHeight: 1.6 }}>
+                After registration, complete a quick survey to personalize your content.
+              </p>
+            </div>
 
-          <div className="form-group">
-            <label>Password *</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Create a strong password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className={validationErrors.password ? 'error' : ''}
-              required
-            />
-            {validationErrors.password && <span className="field-error">{validationErrors.password}</span>}
-            <small className="field-hint">Minimum 6 characters required.</small>
-          </div>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Full Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className={validationErrors.name ? 'error' : ''}
+                  required
+                />
+                {validationErrors.name && <span className="field-error">{validationErrors.name}</span>}
+              </div>
 
-          <div className="form-group">
-            <label>Confirm Password *</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              className={validationErrors.confirmPassword ? 'error' : ''}
-              required
-            />
-            {validationErrors.confirmPassword && <span className="field-error">{validationErrors.confirmPassword}</span>}
-          </div>
+              <div className="form-group">
+                <label>Email Address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="your.email@example.com"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={validationErrors.email ? 'error' : ''}
+                  required
+                />
+                {validationErrors.email && <span className="field-error">{validationErrors.email}</span>}
+              </div>
 
-          {error && (
-            <div className="response-error">
-              <div className="response-icon">!</div>
-              <div className="response-content">
-                <p>{error}</p>
-                {error.includes('already') && (
-                  <p style={{ marginTop: '0.5rem', fontSize: '0.9em' }}>
-                    <a 
-                      href="/login" 
-                      style={{ color: '#facc15', textDecoration: 'underline' }}
-                    >
-                      Click here to login instead
-                    </a>
-                  </p>
+              <div className="form-group">
+                <label>Username *</label>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Choose a unique username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  className={validationErrors.username ? 'error' : ''}
+                  required
+                />
+                {validationErrors.username && <span className="field-error">{validationErrors.username}</span>}
+                <small className="field-hint">Letters, numbers, and underscores only. Min 3 characters.</small>
+              </div>
+
+              <div className="form-group">
+                <label>Password *</label>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Create a strong password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className={validationErrors.password ? 'error' : ''}
+                  required
+                />
+                {formData.password && (
+                  <div style={{
+                    marginTop: '0.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <div style={{
+                      flex: 1,
+                      height: '4px',
+                      background: 'rgba(30, 41, 59, 0.5)',
+                      borderRadius: '2px',
+                      overflow: 'hidden'
+                    }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${(passwordStrength / 5) * 100}%`,
+                        background: getPasswordStrengthColor(),
+                        transition: 'all 0.3s ease'
+                      }}></div>
+                    </div>
+                    <span style={{
+                      fontSize: '0.75rem',
+                      color: getPasswordStrengthColor(),
+                      fontWeight: 600
+                    }}>{getPasswordStrengthLabel()}</span>
+                  </div>
                 )}
+                {validationErrors.password && <span className="field-error">{validationErrors.password}</span>}
+                <small className="field-hint">Use uppercase, lowercase, numbers & symbols for better security.</small>
               </div>
-            </div>
-          )}
-          
-          {success && (
-            <div className="response-success">
-              <div className="response-icon">✓</div>
-              <div className="response-content">
-                <p>{success}</p>
+
+              <div className="form-group">
+                <label>Confirm Password *</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className={validationErrors.confirmPassword ? 'error' : ''}
+                  required
+                />
+                {validationErrors.confirmPassword && <span className="field-error">{validationErrors.confirmPassword}</span>}
               </div>
-            </div>
-          )}
 
-          <button type="submit" className="post-button" disabled={isLoading}>
-            {isLoading ? <span className="spinner"></span> : 'Create Account'}
-          </button>
-        </form>
+              {error && (
+                <div className="response-error">
+                  <div className="response-icon">!</div>
+                  <div className="response-content">
+                    <p>{error}</p>
+                  </div>
+                </div>
+              )}
+              
+              {success && (
+                <div className="response-success">
+                  <div className="response-icon">✓</div>
+                  <div className="response-content">
+                    <p>{success}</p>
+                  </div>
+                </div>
+              )}
 
-        <p style={{ marginTop: '1rem', color: '#22d3ee' }}>
-          Already have an account?{' '}
-          <a href="/login" style={{ color: '#facc15', fontWeight: 'bold' }}>
-            Login here
-          </a>
-        </p>
+              <button type="submit" className="post-button" disabled={isLoading}>
+                {isLoading ? <span className="spinner"></span> : 'Create Account'}
+              </button>
+            </form>
+
+            <p style={{ 
+              marginTop: '1.5rem', 
+              textAlign: 'center', 
+              fontSize: '0.875rem',
+              color: isDarkMode ? 'var(--gray-400)' : 'var(--gray-600)'
+            }}>
+              Already have an account?{' '}
+              <a 
+                href="/login" 
+                style={{ 
+                  color: isDarkMode ? 'var(--primary-white)' : 'var(--primary-black)',
+                  fontWeight: 'bold', 
+                  textDecoration: 'none' 
+                }}
+              >
+                Login here
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

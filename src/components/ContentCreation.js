@@ -1,3 +1,4 @@
+//src/components/ContentCreation.js - Enhanced Version
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ContentCreation.css';
@@ -101,15 +102,28 @@ const ContentCreation = ({ user }) => {
 
   return (
     <div className={`content-creation-container ${isDarkMode ? 'dark' : 'light'}`}>
+      {/* Background Watermark Text */}
+      <div className="background-text bg-text-1" style={{'--rotate': '-15deg'}}>CREATE</div>
+      <div className="background-text bg-text-2" style={{'--rotate': '12deg'}}>AUTOMATE</div>
+      <div className="background-text bg-text-3" style={{'--rotate': '-8deg'}}>SOCIAL</div>
+      <div className="background-text bg-text-4" style={{'--rotate': '20deg'}}>AI CONTENT</div>
+      <div className="background-text bg-text-5" style={{'--rotate': '-18deg'}}>POST</div>
+      
+      {/* Tech Words */}
+      <div className="tech-words tech-word-1">&lt;/&gt; GENERATE</div>
+      <div className="tech-words tech-word-2">[ MARKETING ]</div>
+      <div className="tech-words tech-word-3">{'{ ENGAGE }'}</div>
+      <div className="tech-words tech-word-4">AI POWERED</div>
+
       <div className="extra-icons">
         <span className="icon1">🚀</span>
         <span className="icon2">🤖</span>
-        <span className="icon3">🛰️</span>
-        <span className="icon4">🤖</span>
+        <span className="icon3">📊</span>
+        <span className="icon4">💡</span>
       </div>
 
       <button className="theme-toggle top-left" onClick={toggleTheme}>
-        {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+        {isDarkMode ? '☀️' : '🌙'}
       </button>
 
       <button className="logout-button top-right" onClick={handleLogout}>
@@ -119,26 +133,38 @@ const ContentCreation = ({ user }) => {
       <div className="content-creation-box">
         <div className="header-section">
           <h1 className="content-creation-header">CraftingBrain</h1>
-          <h2 className="content-creation-subheader">Create Social Media Content</h2>
+          <h2 className="content-creation-subheader">AI-Powered Content Creation</h2>
           <div className="header-decoration"></div>
+        </div>
+
+        {/* Engaging Info Card */}
+        <div className="info-card">
+          <span className="info-card-icon">✨</span>
+          <div className="info-card-text">
+            <strong>Create stunning content in seconds!</strong> Our AI analyzes your theme, 
+            generates professional visuals, and posts directly to your social platforms. 
+            <span style={{ display: 'block', marginTop: '0.5rem', opacity: 0.9 }}>
+              📈 10x faster than manual creation | 🎨 Professional quality guaranteed
+            </span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="prompt">Marketing Theme</label>
+            <label htmlFor="prompt">Marketing Theme 🎯</label>
             <input
               type="text"
               id="prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="E.g., Promote a new eco-friendly product"
+              placeholder="E.g., Promote eco-friendly products, AI technology trends..."
               required
             />
             {errors.prompt && <span className="error-message">{errors.prompt}</span>}
           </div>
 
           <div className="form-group">
-            <label htmlFor="numImages">Number of Images</label>
+            <label htmlFor="numImages">Number of Images 📸</label>
             <select
               id="numImages"
               value={numImages}
@@ -146,59 +172,69 @@ const ContentCreation = ({ user }) => {
               required
             >
               <option value="" disabled>Choose number of images</option>
-              {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+              {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Image{n > 1 ? 's' : ''}</option>)}
             </select>
             {errors.numImages && <span className="error-message">{errors.numImages}</span>}
           </div>
 
           <div className="form-group">
-            <label htmlFor="contentType">Content Type</label>
+            <label htmlFor="contentType">Content Type 📝</label>
             <select
               id="contentType"
               value={contentType}
               onChange={(e) => setContentType(e.target.value)}
               required
             >
-              <option value="" disabled>Choose content type</option>
-              {["Informative", "Inspirational", "Promotional", "Educational","Engaging"].map((type) => (
-                <option key={type} value={type}>{type}</option>
+              <option value="" disabled>Choose content style</option>
+              {[
+                { value: "Informative", label: "📚 Informative - Educational & factual" },
+                { value: "Inspirational", label: "💫 Inspirational - Motivating & uplifting" },
+                { value: "Promotional", label: "🎉 Promotional - Sales & marketing" },
+                { value: "Educational", label: "🎓 Educational - Teaching & training" },
+                { value: "Engaging", label: "🔥 Engaging - Interactive & fun" }
+              ].map((type) => (
+                <option key={type.value} value={type.value}>{type.label}</option>
               ))}
             </select>
             {errors.contentType && <span className="error-message">{errors.contentType}</span>}
           </div>
 
           <div className="form-group">
-            <label>Platforms</label>
+            <label>Target Platforms 🌐</label>
             <div className="platform-grid">
-              {Object.entries(platforms).map(([key, value]) => (
-                <label key={key} className={`platform-card ${value ? 'selected' : ''}`}>
+              {[
+                { key: 'instagram', icon: '📷', name: 'Instagram' },
+                { key: 'x', icon: '𝕏', name: 'X (Twitter)' },
+                { key: 'linkedin', icon: '💼', name: 'LinkedIn' },
+                { key: 'facebook', icon: '👥', name: 'Facebook' }
+              ].map(({ key, icon, name }) => (
+                <label key={key} className={`platform-card ${platforms[key] ? 'selected' : ''}`}>
                   <input
                     type="checkbox"
                     name={key}
-                    checked={value}
+                    checked={platforms[key]}
                     onChange={handlePlatformChange}
                     className="platform-checkbox"
                   />
                   <div className="platform-content">
-                    <span className="platform-name">
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </span>
+                    <span className="platform-icon">{icon}</span>
+                    <span className="platform-name">{name}</span>
                   </div>
                 </label>
               ))}
             </div>
             <button type="button" className="select-all-button" onClick={handleSelectAll}>
-              Select All Platforms
+              ✓ Select All Platforms
             </button>
             {errors.platforms && <span className="error-message">{errors.platforms}</span>}
           </div>
 
           <div className="form-actions">
             <button type="submit" className="post-button" disabled={isLoading}>
-              {isLoading ? <span className="spinner"></span> : 'Generate & Post'}
+              {isLoading ? <span className="spinner"></span> : '🚀 Generate & Post'}
             </button>
             <button type="button" className="reset-button" onClick={handleReset}>
-              Reset
+              🔄 Reset
             </button>
           </div>
         </form>
@@ -208,14 +244,14 @@ const ContentCreation = ({ user }) => {
             <div className="response-icon">{isError ? '!' : '✓'}</div>
             <div className="response-content">
               <p>{responseMessage}</p>
-              {isError && (
+              {isError && lastPayload && (
                 <button
                   type="button"
                   className="retry-button"
                   onClick={() => handleSubmit(null, true)}
                   disabled={isLoading}
                 >
-                  {isLoading ? <span className="spinner"></span> : 'Retry'}
+                  {isLoading ? <span className="spinner"></span> : '🔄 Retry'}
                 </button>
               )}
             </div>
