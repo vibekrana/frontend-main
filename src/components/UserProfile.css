@@ -95,82 +95,6 @@ body.dark .profile-header {
   flex-shrink: 0;
   transition: all 0.3s ease;
   overflow: hidden;
-  position: relative;
-}
-
-.profile-avatar-wrapper {
-  position: relative;
-  margin-right: 25px;
-}
-
-.profile-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.upload-icon {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 2px solid;
-}
-
-body.light .upload-icon {
-  background: var(--primary-white);
-  border-color: var(--gray-300);
-}
-
-body.dark .upload-icon {
-  background: var(--gray-700);
-  border-color: var(--gray-600);
-}
-
-.upload-icon:hover {
-  transform: scale(1.1);
-  box-shadow: var(--shadow-md);
-}
-
-.upload-btn {
-  margin-top: 10px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 2px solid;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-body.light .upload-btn {
-  background: var(--primary-black);
-  color: var(--primary-white);
-  border-color: var(--primary-black);
-}
-
-body.dark .upload-btn {
-  background: var(--primary-white);
-  color: var(--primary-black);
-  border-color: var(--primary-white);
-}
-
-.upload-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.upload-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 body.light .profile-avatar {
@@ -301,6 +225,48 @@ body.light .stat-card p {
 
 body.dark .stat-card p {
   color: var(--primary-white);
+}
+
+/* Scheduled Time Display */
+.scheduled-time-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-icon {
+  font-size: 28px;
+}
+
+.scheduled-time-display p {
+  font-size: 20px;
+  margin: 0;
+}
+
+/* Color Theme Display */
+.color-theme-display {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.color-preview {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.color-preview:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.color-theme-display p {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
 }
 
 .stat-card select {

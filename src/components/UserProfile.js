@@ -24,7 +24,6 @@ const UserProfile = () => {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      // Try multiple token key names that might be used
       const token = localStorage.getItem('token') || 
                     localStorage.getItem('authToken') || 
                     localStorage.getItem('auth_token');
@@ -34,7 +33,6 @@ const UserProfile = () => {
       if (!token) {
         setError('Not authenticated - Please log in again');
         setLoading(false);
-        // Redirect to login after 2 seconds
         setTimeout(() => {
           window.location.href = '/login';
         }, 2000);
@@ -85,9 +83,31 @@ const UserProfile = () => {
     }));
   };
 
+  const formatDate = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    const date = new Date(parseInt(timestamp) * 1000);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  };
+
+  const getColorThemeValue = (themeName) => {
+    const colorThemes = {
+      'Blue': '#3B82F6',
+      'Red': '#EF4444',
+      'Green': '#10B981',
+      'Purple': '#8B5CF6',
+      'Orange': '#F97316',
+      'Pink': '#EC4899',
+      'Yellow': '#EAB308',
+      'Teal': '#14B8A6',
+      'Indigo': '#6366F1',
+      'Default': '#6B7280',
+      'Not set': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    };
+    return colorThemes[themeName] || colorThemes['Default'];
+  };
+
   const handleSaveProfile = async () => {
     try {
-      // Use the same token retrieval logic as fetchUserProfile
       const token = localStorage.getItem('token') || 
                     localStorage.getItem('authToken') || 
                     localStorage.getItem('auth_token');
@@ -98,7 +118,7 @@ const UserProfile = () => {
         return;
       }
       
-      const response = await fetch('https://4fqbpp1yya.execute-api.ap-south-1.amazonaws.com/prod/user/profile', {
+      const response = await fetch('http://13.233.45.167:5000/user/profile', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -108,6 +128,8 @@ const UserProfile = () => {
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Update error:', errorText);
         throw new Error('Failed to update profile');
       }
 
@@ -118,12 +140,6 @@ const UserProfile = () => {
     } catch (err) {
       alert('Error updating profile: ' + err.message);
     }
-  };
-
-  const formatDate = (timestamp) => {
-    if (!timestamp) return 'N/A';
-    const date = new Date(parseInt(timestamp) * 1000);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   };
 
   if (loading) {
@@ -203,6 +219,28 @@ const UserProfile = () => {
         <div className="stat-card">
           <h3>Accounts Connected</h3>
           <p>0/4</p>
+        </div>
+
+        <div className="stat-card">
+          <h3>Scheduled Time</h3>
+          <div className="scheduled-time-display">
+            <span className="time-icon">🕐</span>
+            <p>{userData.scheduled_time || 'Not set'}</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <h3>Color Theme</h3>
+          <div className="color-theme-display">
+            <div 
+              className="color-preview" 
+              style={{ 
+                background: getColorThemeValue(userData.color_theme),
+                border: '2px solid var(--gray-300)'
+              }}
+            ></div>
+            <p>{userData.color_theme || 'Not set'}</p>
+          </div>
         </div>
       </div>
 
